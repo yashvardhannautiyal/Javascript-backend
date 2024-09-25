@@ -1,10 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
 import './App.css'
+import axios from 'axios';
 
 function App() {
   const [jokes, setJokes] = useState([])
+//this will give error : CORS policy
+  useEffect(() =>{
+    // axios.get('http://localhost:3000/api/jokes')
+    axios.get('/api/jokes')//we can also do like this
+    .then((response)=>{
+      setJokes(response.data)
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  })
 
   return (
     <>
@@ -12,12 +22,13 @@ function App() {
     <p>Jokes : {jokes.length}</p>
 
     {
-      jokes.map((joke) =>{
+      jokes.map((joke, index) =>{
         <div key ={joke.id}>
           <h3>{joke.title}</h3>
           <p>{joke.content}</p>
         </div>
       })
+      //this will give jokes : 0 as we have not given a request till now and to give a request we gonna use axios as it is famous and in used in production [alternatives : "react querries" , "fetch"]
     }
     </>
   )
